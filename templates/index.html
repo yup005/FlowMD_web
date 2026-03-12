@@ -5,24 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlowMD Clinic | Aesthetic Excellence</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
     <style>
-        /* 基础样式优化 */
-        body { background-color: #fafafa; color: #333; font-family: 'Inter', sans-serif; }
-        .navbar { background: white; padding: 2.5rem 0; border-bottom: 1px solid #eee; }
-        .navbar-brand { letter-spacing: 5px; font-weight: 300; text-transform: uppercase; }
-        .section-title { font-weight: 200; letter-spacing: 3px; text-transform: uppercase; margin: 5rem 0 3rem; text-align: center; }
+        body { background-color: #ffffff; color: #1a1a1a; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
 
-        /* 案例卡片样式 */
-        .case-card { background: white; padding: 15px; border: 1px solid #f0f0f0; margin-bottom: 20px; transition: 0.3s; }
-        .case-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .img-label { font-size: 10px; color: #999; letter-spacing: 1px; margin-top: 5px; text-transform: uppercase; }
-        .view-more-btn { letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; border-radius: 0; padding: 12px 30px; }
+        /* 导航栏 */
+        .navbar { background: white; padding: 2rem 0; border-bottom: 1px solid #f5f5f5; }
+        .navbar-brand { letter-spacing: 6px; font-weight: 200; text-transform: uppercase; font-size: 1.25rem; }
 
-        /* 医生/服务者样式 */
-        .provider-img { width: 160px; height: 160px; object-fit: cover; border-radius: 50%; filter: grayscale(20%); transition: 0.3s; }
-        .provider-img:hover { filter: grayscale(0%); }
-        .provider-name { font-weight: 400; letter-spacing: 1px; margin-top: 1.5rem; }
-        .provider-title { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: #999; margin-bottom: 1rem; }
+        /* 通用标题 */
+        .section-title { font-weight: 200; letter-spacing: 4px; text-transform: uppercase; margin: 6rem 0 3rem; text-align: center; font-size: 1.15rem; }
+        .uppercase-header { text-transform: uppercase; letter-spacing: 2px; font-weight: 300; }
+
+        /* Dr. Ran 首席展示区 */
+        .dr-hero { background-color: #fafafa; padding: 6rem 0; border-bottom: 1px solid #eee; }
+        .dr-img { width: 100%; max-width: 380px; transition: 0.5s; border: 1px solid #eee; }
+
+        /* Case 卡片设计 */
+        .case-card-container { position: relative; margin-bottom: 4rem; }
+        .case-visual-box {
+            position: relative; overflow: hidden; aspect-ratio: 1 / 1;
+            background-color: #fcfcfc; border: 1px solid #eee; cursor: zoom-in;
+            transition: all 0.3s;
+        }
+        .case-visual-box:hover { border-color: #ccc; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+
+        .stack-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.6s ease; }
+        .after-img { z-index: 1; opacity: 1; }
+        .before-img { z-index: 2; opacity: 0; }
+        .case-visual-box:hover .before-img { opacity: 1; }
+
+        /* 标签 */
+        .ba-label { position: absolute; bottom: 12px; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 1px; color: white; z-index: 5; background: rgba(0,0,0,0.2); padding: 2px 8px; pointer-events: none; }
+        .label-before { left: 12px; opacity: 0; transition: opacity 0.5s; }
+        .label-after { right: 12px; opacity: 1; transition: opacity 0.5s; }
+        .case-visual-box:hover .label-before { opacity: 1; }
+        .case-visual-box:hover .label-after { opacity: 0; }
+
+        /* 详情覆盖层 (点击 See Details) */
+        .full-desc-overlay {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); padding: 30px;
+            z-index: 100; text-align: center; flex-direction: column; justify-content: center;
+        }
+        .full-desc-overlay.show { display: flex; }
+        .desc-title { font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 400; margin-bottom: 12px; color: #000; }
+        .desc-content { font-size: 0.65rem; color: #666; line-height: 1.8; }
+
+        .description-static { margin-top: 15px; text-align: center; }
+        .case-desc-short { font-size: 0.6rem; color: #bbb; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; text-transform: uppercase; letter-spacing: 1.5px; }
+
+        /* 🌟 Lightbox 大图预览 */
+        #lightbox-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #ffffff; z-index: 2000; cursor: pointer; overflow-y: auto; padding: 40px 20px;
+        }
+        #lightbox-overlay.show { display: block; }
+        .lightbox-content { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+        .lightbox-img-wrapper { width: 100%; text-align: center; }
+        .lightbox-img-wrapper img { width: 100%; height: auto; border: 1px solid #f0f0f0; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .lightbox-caption { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; color: #999; }
+        .close-x { position: fixed; top: 20px; right: 25px; font-size: 24px; color: #000; z-index: 2100; font-weight: 200; cursor: pointer; }
+
+        /* Practitioners 医师团队 */
+        .provider-circle-container { width: 160px; height: 160px; margin: 0 auto; overflow: hidden; border-radius: 50%; border: 1px solid #eee; }
+        .provider-img { width: 100%; height: 100%; object-fit: cover; }
+        .provider-name { font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 1.5rem; font-size: 0.9rem; }
+        .provider-title { font-size: 0.65rem; color: #999; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* 按钮样式 */
+        .view-more-btn {
+            letter-spacing: 3px; text-transform: uppercase; font-size: 0.7rem; padding: 14px 45px;
+            border: 1px solid #333; transition: 0.3s; background: transparent; color: #333; text-decoration: none; display: inline-block;
+        }
+        .view-more-btn:hover { background: #333; color: #fff; }
+
+        /* 📱 手机端适配 */
+        @media (max-width: 768px) {
+            .container { padding-left: 30px !important; padding-right: 30px !important; }
+            .navbar-brand { font-size: 1.1rem; }
+            .dr-hero { padding: 4rem 0; text-align: center; }
+            .dr-hero .ps-md-5 { padding-left: 0 !important; margin-top: 2rem; }
+            .col-6 { width: 100% !important; } /* 首页案例单列 */
+            .section-title { font-size: 1rem; margin: 4rem 0 2rem; }
+            .view-more-btn { width: 100%; padding: 18px 0; }
+            .provider-circle-container { width: 130px; height: 130px; }
+            footer { padding-bottom: 4rem !important; }
+        }
+
+        /* 宽屏大图左右排 */
+        @media (min-width: 992px) {
+            #lightbox-overlay { display: none; align-items: center; justify-content: center; overflow: hidden; }
+            #lightbox-overlay.show { display: flex; }
+            .lightbox-content { flex-direction: row; max-width: 1200px; padding: 40px; }
+        }
     </style>
 </head>
 <body>
@@ -30,50 +106,119 @@
         <div class="container"><a class="navbar-brand text-dark text-decoration-none" href="/">FLOWMD</a></div>
     </nav>
 
+    <section class="dr-hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-5 text-center">
+                    {% set dr = providers | selectattr('name', 'equalto', 'Dr. Ran') | first %}
+                    <img src="{{ url_for('static', filename='uploads/' + dr.photo) if dr else 'https://via.placeholder.com/400x500' }}" class="dr-img shadow-sm">
+                </div>
+                <div class="col-md-7 ps-md-5">
+                    <span class="uppercase-header" style="font-size: 0.65rem; color: #999;">Founder & Medical Director</span>
+                    <h2 class="fw-light mb-4" style="letter-spacing: 3px; margin-top: 0.5rem;">Meet Dr. Ran</h2>
+                    <p class="fw-light mb-4" style="line-height: 1.8; color: #555; font-size: 0.95rem;">{{ dr.bio if dr else 'Leading with science and art.' }}</p>
+                    <a href="https://wa.me/your_number" class="view-more-btn" style="background: #333; color: #fff;">Book Consultation</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <div class="container">
-        <h2 class="section-title">Featured Cases</h2>
-        <div class="row g-4">
+        <h2 class="section-title">Clinical Results</h2>
+        <div class="row g-5">
             {% for case in cases %}
-            <div class="col-md-6">
-                <div class="case-card shadow-sm text-center">
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <img src="{{ url_for('static', filename='uploads/' + case.before_img) }}" class="w-100" alt="Before">
-                            <div class="img-label">Before</div>
+            <div class="col-lg-3 col-md-4 col-6">
+                <div class="case-card-container">
+                    <div class="case-visual-box shadow-sm" onclick="openComparisonLightbox('{{ url_for('static', filename='uploads/' + case.before_img) }}', '{{ url_for('static', filename='uploads/' + case.after_img) }}')">
+                        <div class="ba-label label-before">Before</div>
+                        <div class="ba-label label-after">After</div>
+                        <div class="image-stack">
+                            <img src="{{ url_for('static', filename='uploads/' + case.after_img) }}" class="stack-img after-img">
+                            <img src="{{ url_for('static', filename='uploads/' + case.before_img) }}" class="stack-img before-img">
                         </div>
-                        <div class="col-6">
-                            <img src="{{ url_for('static', filename='uploads/' + case.after_img) }}" class="w-100" alt="After">
-                            <div class="img-label">After</div>
+
+                        <div id="full-{{ case.id }}" class="full-desc-overlay">
+                            <div class="desc-title">{{ case.title }}</div>
+                            <div class="desc-content">{{ case.description if case.description and case.description != 'None' else '' }}</div>
+                            <span style="font-size: 10px; color: #ccc; text-transform: uppercase; margin-top: 25px; cursor: pointer;" onclick="toggleOverlay('full-{{ case.id }}', event)">✕ Close</span>
                         </div>
                     </div>
-                    <h5 class="mt-4 mb-1 fw-normal">{{ case.title }}</h5>
-                    <p class="small text-muted px-3">{{ case.description if case.description and case.description != 'None' else '' }}</p>
+
+                    <div class="description-static">
+                        <h6 class="uppercase-header mb-0" style="font-size: 0.7rem; font-weight: 400;">{{ case.title }}</h6>
+                        <p class="case-desc-short" onclick="toggleOverlay('full-{{ case.id }}', event)">See details</p>
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
 
         <div class="text-center mt-5">
-            <a href="/gallery" class="btn btn-outline-dark view-more-btn">View Full Gallery</a>
+            <a href="/gallery" class="view-more-btn">View Full Gallery</a>
         </div>
 
         <h2 class="section-title">Our Practitioners</h2>
         <div class="row justify-content-center">
             {% for p in providers %}
                 {% if not p.is_hidden %}
-                <div class="col-md-4 text-center mb-5 px-4">
-                    <img src="{{ url_for('static', filename='uploads/' + p.photo) }}" class="provider-img shadow-sm" alt="{{ p.name }}">
+                <div class="col-md-3 col-6 text-center mb-5">
+                    <div class="provider-circle-container">
+                        <img src="{{ url_for('static', filename='uploads/' + p.photo) }}" class="provider-img" alt="{{ p.name }}">
+                    </div>
                     <h5 class="provider-name">{{ p.name }}</h5>
                     <div class="provider-title">{{ p.job_title }}</div>
-                    <p class="small text-muted">{{ p.bio }}</p>
                 </div>
                 {% endif %}
             {% endfor %}
         </div>
     </div>
 
+    <div id="lightbox-overlay" onclick="closeLightbox()">
+        <span class="close-x">✕</span>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <div class="lightbox-img-wrapper">
+                <div class="lightbox-caption">Before</div>
+                <img id="lb-before" src="">
+            </div>
+            <div class="lightbox-img-wrapper">
+                <div class="lightbox-caption">After</div>
+                <img id="lb-after" src="">
+            </div>
+        </div>
+    </div>
+
     <footer class="py-5 text-center text-muted border-top mt-5">
-        <small>&copy; 2026 <a href="{{ url_for('admin', key=admin_key) }}" style="color:inherit; text-decoration:none; opacity: 0.5;">FLOW MD CLINIC临时用的, 之后记得删掉这个link</a>. ALL RIGHTS RESERVED.</small>
+        <div class="container">
+            <small style="font-size: 0.6rem; letter-spacing: 1px;">
+                &copy; 2026
+                <a href="{{ url_for('admin', key=admin_key) }}" style="color:inherit; text-decoration:none; opacity: 0.5;">
+                    FLOW MD CLINIC临时用的, 之后记得删掉这个link
+                </a>.
+                ALL RIGHTS RESERVED.
+            </small>
+        </div>
     </footer>
+
+    <script>
+        function toggleOverlay(id, event) {
+            if (event) event.stopPropagation();
+            const el = document.getElementById(id);
+            el.classList.toggle('show');
+        }
+
+        function openComparisonLightbox(beforeUrl, afterUrl) {
+            document.getElementById('lb-before').src = beforeUrl;
+            document.getElementById('lb-after').src = afterUrl;
+            const lb = document.getElementById('lightbox-overlay');
+            lb.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lb = document.getElementById('lightbox-overlay');
+            lb.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+    </script>
 </body>
 </html>
