@@ -59,7 +59,7 @@ def create_app():
     @app.route('/gallery')
     def gallery():
         all_cases = Case.query.filter_by(is_hidden=False).order_by(Case.upload_date.desc()).all()
-        return render_template('archive.html', cases=all_cases)
+        return render_template('gallery.html', cases=all_cases)
 
     @app.route('/secret_admin')
     def admin():

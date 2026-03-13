@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    /* 🌟 新增：标题横向米色背景 */
+    .gallery-header-bg {
+        background-color: var(--fmd-beige);
+        padding: 6rem 0;
+        margin-bottom: 3rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .gallery-wrapper { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px; } /* 🌟 调整了 padding-top */
+    .grid-item { width: 33.333%; padding: 15px; float: left; }
+    .case-card-gal { background: white; padding: 15px; border: 1px solid #eee; cursor: zoom-in; transition: 0.3s; }
+    .img-container-gal { position: relative; width: 100%; background: #fcfcfc; overflow: hidden; display: flex; align-items: center; }
+    .img-container-gal img { width: 100%; height: auto; display: block; transition: opacity 0.6s ease; }
+    .before-gal { position: absolute; top: 0; left: 0; opacity: 0; z-index: 2; }
+    .case-card-gal:hover .before-gal { opacity: 1; }
+
+    @media (max-width: 768px) {
+        .grid-item { width: 100%; padding: 10px 0; }
+        .img-container-gal { max-height: 60vh; }
+        .img-container-gal img { object-fit: contain; }
+        .gallery-header-bg { padding: 4rem 0; } /* 📱 手机端稍微收紧一点 */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="gallery-header-bg">
+    <div class="container text-center">
+        <h4 class="fw-light m-0" style="letter-spacing:4px; text-transform:uppercase; font-size: 1.1rem;">Full Case Archive</h4>
+    </div>
+</div>
+
+<div class="gallery-wrapper">
+    <div class="masonry-grid">
+        {% for case in cases %}
+        <div class="grid-item">
+            <div class="case-card-gal" onclick="openComparisonLightbox('{{ url_for('static', filename='uploads/' + case.before_img) }}', '{{ url_for('static', filename='uploads/' + case.after_img) }}')">
+                <div class="img-container-gal shadow-sm">
+                    <img src="{{ url_for('static', filename='uploads/' + case.before_img) }}" class="before-gal">
+                    <img src="{{ url_for('static', filename='uploads/' + case.after_img) }}" class="after-gal">
+                </div>
+                <div style="font-size:0.75rem; text-transform:uppercase; text-align:center; margin-top:15px;">{{ case.title }}</div>
+                <div style="font-size:0.65rem; color:#999; text-align:center; margin-top:5px; word-wrap:break-word;">{{ case.description }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var grid = document.querySelector('.masonry-grid');
+        imagesLoaded(grid, function() {
+            new Masonry(grid, { itemSelector: '.grid-item', columnWidth: '.grid-item', percentPosition: true });
+        });
+    });
+</script>
+{% endblock %}

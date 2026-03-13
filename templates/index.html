@@ -1,224 +1,174 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlowMD Clinic | Aesthetic Excellence</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
-    <style>
-        body { background-color: #ffffff; color: #1a1a1a; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+{% extends "base.html" %}
 
-        /* 导航栏 */
-        .navbar { background: white; padding: 2rem 0; border-bottom: 1px solid #f5f5f5; }
-        .navbar-brand { letter-spacing: 6px; font-weight: 200; text-transform: uppercase; font-size: 1.25rem; }
+{% block extra_css %}
+<style>
+    /* --- 🌟 首页 Slogan (保持原样) --- */
+    .hero-slogan { height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .hero-slogan h1 { font-weight: 100; letter-spacing: 12px; font-size: 1.4rem; text-transform: uppercase; line-height: 2.2; max-width: 1000px; padding: 0 20px; }
 
-        /* 通用标题 */
-        .section-title { font-weight: 200; letter-spacing: 4px; text-transform: uppercase; margin: 6rem 0 3rem; text-align: center; font-size: 1.15rem; }
-        .uppercase-header { text-transform: uppercase; letter-spacing: 2px; font-weight: 300; }
+    /* --- 🌟 诊所介绍板块 (保持原样) --- */
+    .clinic-intro-section { background-color: var(--fmd-beige); padding: 8rem 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+    .intro-img { width: 100%; max-width: 500px; border: 1px solid #eee; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
-        /* Dr. Ran 首席展示区 */
-        .dr-hero { background-color: #fafafa; padding: 6rem 0; border-bottom: 1px solid #eee; }
-        .dr-img { width: 100%; max-width: 380px; transition: 0.5s; border: 1px solid #eee; }
+    /* --- 🌟 Case 展示核心补丁 (维持原样) --- */
+    .section-title { font-weight: 200; letter-spacing: 4px; text-transform: uppercase; margin: 6rem 0 3rem; text-align: center; font-size: 1.15rem; }
+    .case-card-container { position: relative; margin-bottom: 4rem; }
+    .case-visual-box { position: relative; overflow: hidden; aspect-ratio: 1 / 1; background-color: #fcfcfc; border: 1px solid #eee; cursor: zoom-in; transition: all 0.3s; }
+    .case-visual-box:hover { border-color: #ccc; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    .stack-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.6s ease; }
+    .after-img { z-index: 1; opacity: 1; }
+    .before-img { z-index: 2; opacity: 0; }
+    .case-visual-box:hover .before-img { opacity: 1; }
+    .ba-label { position: absolute; bottom: 12px; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 1px; color: white; z-index: 5; background: rgba(0,0,0,0.2); padding: 2px 8px; pointer-events: none; }
+    .label-before { left: 12px; opacity: 0; transition: opacity 0.5s; }
+    .label-after { right: 12px; opacity: 1; transition: opacity 0.5s; }
+    .case-visual-box:hover .label-before { opacity: 1; }
+    .case-visual-box:hover .label-after { opacity: 0; }
+    .full-desc-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); padding: 30px; z-index: 100; text-align: center; flex-direction: column; justify-content: center; }
+    .full-desc-overlay.show { display: flex; }
+    .desc-title { font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 400; margin-bottom: 12px; color: #000; }
+    .desc-content { font-size: 0.65rem; color: #666; line-height: 1.8; word-wrap: break-word; }
+    .description-static { margin-top: 15px; text-align: center; }
+    .case-desc-short { font-size: 0.6rem; color: #bbb; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; text-transform: uppercase; letter-spacing: 1.5px; }
 
-        /* Case 卡片设计 */
-        .case-card-container { position: relative; margin-bottom: 4rem; }
-        .case-visual-box {
-            position: relative; overflow: hidden; aspect-ratio: 1 / 1;
-            background-color: #fcfcfc; border: 1px solid #eee; cursor: zoom-in;
-            transition: all 0.3s;
-        }
-        .case-visual-box:hover { border-color: #ccc; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    /* --- 🌟 医师板块：方案B 柔和渐变分割 --- */
+    .practitioners-section {
+        padding: 6rem 0 8rem;
+        background-color: #fff;
+        position: relative;
+    }
 
-        .stack-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.6s ease; }
-        .after-img { z-index: 1; opacity: 1; }
-        .before-img { z-index: 2; opacity: 0; }
-        .case-visual-box:hover .before-img { opacity: 1; }
+    /* 🌟 方案B：利用渐变营造的光影分割感 */
+    .practitioners-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 150px; /* 渐变高度 */
+        background: linear-gradient(to bottom, var(--fmd-beige) 0%, rgba(255, 255, 255, 0) 100%);
+        opacity: 0.8;
+    }
 
-        /* 标签 */
-        .ba-label { position: absolute; bottom: 12px; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 1px; color: white; z-index: 5; background: rgba(0,0,0,0.2); padding: 2px 8px; pointer-events: none; }
-        .label-before { left: 12px; opacity: 0; transition: opacity 0.5s; }
-        .label-after { right: 12px; opacity: 1; transition: opacity 0.5s; }
-        .case-visual-box:hover .label-before { opacity: 1; }
-        .case-visual-box:hover .label-after { opacity: 0; }
+    .provider-item { margin-bottom: 2rem; position: relative; z-index: 2; }
+    .provider-circle-container {
+        width: 140px; height: 140px; margin: 0 auto;
+        overflow: hidden; border-radius: 50%;
+        background: #fcfcfc;
+        transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .provider-item:hover .provider-circle-container { transform: translateY(-5px); }
+    .provider-img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 详情覆盖层 (点击 See Details) */
-        .full-desc-overlay {
-            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); padding: 30px;
-            z-index: 100; text-align: center; flex-direction: column; justify-content: center;
-        }
-        .full-desc-overlay.show { display: flex; }
-        .desc-title { font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 400; margin-bottom: 12px; color: #000; }
-        .desc-content { font-size: 0.65rem; color: #666; line-height: 1.8; }
+    .provider-name {
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        font-weight: 300;
+        margin-top: 1.8rem;
+        margin-bottom: 0.4rem;
+        color: #1a1a1a;
+    }
+    .provider-title {
+        font-size: 0.55rem;
+        color: #aaa;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 300;
+    }
 
-        .description-static { margin-top: 15px; text-align: center; }
-        .case-desc-short { font-size: 0.6rem; color: #bbb; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; text-transform: uppercase; letter-spacing: 1.5px; }
+    @media (max-width: 768px) {
+        .practitioners-section { padding: 4rem 1rem 5rem; }
+        .provider-circle-container { width: 120px; height: 120px; }
+    }
+</style>
+{% endblock %}
 
-        /* 🌟 Lightbox 大图预览 */
-        #lightbox-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #ffffff; z-index: 2000; cursor: pointer; overflow-y: auto; padding: 40px 20px;
-        }
-        #lightbox-overlay.show { display: block; }
-        .lightbox-content { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
-        .lightbox-img-wrapper { width: 100%; text-align: center; }
-        .lightbox-img-wrapper img { width: 100%; height: auto; border: 1px solid #f0f0f0; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
-        .lightbox-caption { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; color: #999; }
-        .close-x { position: fixed; top: 20px; right: 25px; font-size: 24px; color: #000; z-index: 2100; font-weight: 200; cursor: pointer; }
-
-        /* Practitioners 医师团队 */
-        .provider-circle-container { width: 160px; height: 160px; margin: 0 auto; overflow: hidden; border-radius: 50%; border: 1px solid #eee; }
-        .provider-img { width: 100%; height: 100%; object-fit: cover; }
-        .provider-name { font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 1.5rem; font-size: 0.9rem; }
-        .provider-title { font-size: 0.65rem; color: #999; letter-spacing: 1px; text-transform: uppercase; }
-
-        /* 按钮样式 */
-        .view-more-btn {
-            letter-spacing: 3px; text-transform: uppercase; font-size: 0.7rem; padding: 14px 45px;
-            border: 1px solid #333; transition: 0.3s; background: transparent; color: #333; text-decoration: none; display: inline-block;
-        }
-        .view-more-btn:hover { background: #333; color: #fff; }
-
-        /* 📱 手机端适配 */
-        @media (max-width: 768px) {
-            .container { padding-left: 30px !important; padding-right: 30px !important; }
-            .navbar-brand { font-size: 1.1rem; }
-            .dr-hero { padding: 4rem 0; text-align: center; }
-            .dr-hero .ps-md-5 { padding-left: 0 !important; margin-top: 2rem; }
-            .col-6 { width: 100% !important; } /* 首页案例单列 */
-            .section-title { font-size: 1rem; margin: 4rem 0 2rem; }
-            .view-more-btn { width: 100%; padding: 18px 0; }
-            .provider-circle-container { width: 130px; height: 130px; }
-            footer { padding-bottom: 4rem !important; }
-        }
-
-        /* 宽屏大图左右排 */
-        @media (min-width: 992px) {
-            #lightbox-overlay { display: none; align-items: center; justify-content: center; overflow: hidden; }
-            #lightbox-overlay.show { display: flex; }
-            .lightbox-content { flex-direction: row; max-width: 1200px; padding: 40px; }
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar text-center">
-        <div class="container"><a class="navbar-brand text-dark text-decoration-none" href="/">FLOWMD</a></div>
-    </nav>
-
-    <section class="dr-hero">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-5 text-center">
-                    {% set dr = providers | selectattr('name', 'equalto', 'Dr. Ran') | first %}
-                    <img src="{{ url_for('static', filename='uploads/' + dr.photo) if dr else 'https://via.placeholder.com/400x500' }}" class="dr-img shadow-sm">
-                </div>
-                <div class="col-md-7 ps-md-5">
-                    <span class="uppercase-header" style="font-size: 0.65rem; color: #999;">Founder & Medical Director</span>
-                    <h2 class="fw-light mb-4" style="letter-spacing: 3px; margin-top: 0.5rem;">Meet Dr. Ran</h2>
-                    <p class="fw-light mb-4" style="line-height: 1.8; color: #555; font-size: 0.95rem;">{{ dr.bio if dr else 'Leading with science and art.' }}</p>
-                    <a href="https://wa.me/your_number" class="view-more-btn" style="background: #333; color: #fff;">Book Consultation</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
+{% block content %}
+<section class="hero-slogan">
     <div class="container">
-        <h2 class="section-title">Clinical Results</h2>
-        <div class="row g-5">
-            {% for case in cases %}
-            <div class="col-lg-3 col-md-4 col-6">
-                <div class="case-card-container">
-                    <div class="case-visual-box shadow-sm" onclick="openComparisonLightbox('{{ url_for('static', filename='uploads/' + case.before_img) }}', '{{ url_for('static', filename='uploads/' + case.after_img) }}')">
-                        <div class="ba-label label-before">Before</div>
-                        <div class="ba-label label-after">After</div>
-                        <div class="image-stack">
-                            <img src="{{ url_for('static', filename='uploads/' + case.after_img) }}" class="stack-img after-img">
-                            <img src="{{ url_for('static', filename='uploads/' + case.before_img) }}" class="stack-img before-img">
-                        </div>
+        <h1>[ This is Slogan 之后会修改 ]</h1>
+    </div>
+</section>
 
-                        <div id="full-{{ case.id }}" class="full-desc-overlay">
-                            <div class="desc-title">{{ case.title }}</div>
-                            <div class="desc-content">{{ case.description if case.description and case.description != 'None' else '' }}</div>
-                            <span style="font-size: 10px; color: #ccc; text-transform: uppercase; margin-top: 25px; cursor: pointer;" onclick="toggleOverlay('full-{{ case.id }}', event)">✕ Close</span>
-                        </div>
+<section class="clinic-intro-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center">
+                <img src="{{ url_for('static', filename='uploads/clinic_main.jpg') }}" class="intro-img" onerror="this.src='https://via.placeholder.com/600x400'">
+            </div>
+            <div class="col-md-6 ps-md-5 mt-4 mt-md-0">
+                <span style="font-size: 0.65rem; color: #999; letter-spacing: 3px; text-transform: uppercase;">Excellence in Motion</span>
+                <h2 style="font-weight: 200; letter-spacing: 4px; margin: 1rem 0 2rem; text-transform: uppercase;">About FlowMD Clinic</h2>
+                <p style="line-height: 2.2; color: #555; font-size: 0.9rem; font-weight: 300;">
+                    At FlowMD, we believe in the art of natural enhancement. Our clinic combines cutting-edge medical science with an aesthetic eye to deliver results that are both transformative and subtle.
+                    <br><br>
+                    Our mission is to provide a sanctuary where clinical excellence meets bespoke care, ensuring every journey is as unique as the face it belongs to.
+                </p>
+                <a href="/treatments" class="btn-book-now" style="background: #1a1a1a; color: #fff; margin-top: 2rem;">Explore Treatments</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container" style="padding-bottom: 2rem;"> <h2 class="section-title">Clinical Results</h2>
+    <div class="row g-5">
+        {% for case in cases %}
+        <div class="col-lg-3 col-md-4 col-6">
+            <div class="case-card-container">
+                <div class="case-visual-box shadow-sm" onclick="openComparisonLightbox('{{ url_for('static', filename='uploads/' + case.before_img) }}', '{{ url_for('static', filename='uploads/' + case.after_img) }}')">
+                    <div class="ba-label label-before">Before</div>
+                    <div class="ba-label label-after">After</div>
+                    <div class="image-stack">
+                        <img src="{{ url_for('static', filename='uploads/' + case.after_img) }}" class="stack-img after-img">
+                        <img src="{{ url_for('static', filename='uploads/' + case.before_img) }}" class="stack-img before-img">
                     </div>
-
-                    <div class="description-static">
-                        <h6 class="uppercase-header mb-0" style="font-size: 0.7rem; font-weight: 400;">{{ case.title }}</h6>
-                        <p class="case-desc-short" onclick="toggleOverlay('full-{{ case.id }}', event)">See details</p>
+                    <div id="full-{{ case.id }}" class="full-desc-overlay">
+                        <div class="desc-title">{{ case.title }}</div>
+                        <div class="desc-content">{{ case.description if case.description and case.description != 'None' else '' }}</div>
+                        <span style="font-size: 10px; color: #ccc; text-transform: uppercase; margin-top: 25px; cursor: pointer;" onclick="toggleOverlay('full-{{ case.id }}', event)">✕ Close</span>
                     </div>
                 </div>
+                <div class="description-static">
+                    <h6 style="font-size: 0.7rem; font-weight: 400; text-transform: uppercase; margin-bottom: 0; letter-spacing: 1.5px;">{{ case.title }}</h6>
+                    <p class="case-desc-short" onclick="toggleOverlay('full-{{ case.id }}', event)">See details</p>
+                </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
+    </div>
 
-        <div class="text-center mt-5">
-            <a href="/gallery" class="view-more-btn">View Full Gallery</a>
-        </div>
+    <div class="text-center mt-4">
+        <a href="/gallery" class="btn btn-outline-dark" style="border-radius: 0; padding: 12px 40px; letter-spacing: 3px; text-transform: uppercase; font-size: 0.7rem;">Explore Full Archive</a>
+    </div>
+</div>
 
-        <h2 class="section-title">Our Practitioners</h2>
-        <div class="row justify-content-center">
+<section class="practitioners-section">
+    <div class="container">
+        <h2 class="section-title" style="margin-top: 0; margin-bottom: 5rem; position: relative; z-index: 2;">Our Practitioners</h2>
+        <div class="row justify-content-center g-5">
             {% for p in providers %}
                 {% if not p.is_hidden %}
-                <div class="col-md-3 col-6 text-center mb-5">
-                    <div class="provider-circle-container">
-                        <img src="{{ url_for('static', filename='uploads/' + p.photo) }}" class="provider-img" alt="{{ p.name }}">
+                <div class="col-md-3 col-6">
+                    <div class="provider-item text-center">
+                        <div class="provider-circle-container">
+                            <img src="{{ url_for('static', filename='uploads/' + p.photo) }}" class="provider-img" alt="{{ p.name }}">
+                        </div>
+                        <h5 class="provider-name">{{ p.name }}</h5>
+                        <div class="provider-title">{{ p.job_title }}</div>
                     </div>
-                    <h5 class="provider-name">{{ p.name }}</h5>
-                    <div class="provider-title">{{ p.job_title }}</div>
                 </div>
                 {% endif %}
             {% endfor %}
         </div>
     </div>
+</section>
 
-    <div id="lightbox-overlay" onclick="closeLightbox()">
-        <span class="close-x">✕</span>
-        <div class="lightbox-content" onclick="event.stopPropagation()">
-            <div class="lightbox-img-wrapper">
-                <div class="lightbox-caption">Before</div>
-                <img id="lb-before" src="">
-            </div>
-            <div class="lightbox-img-wrapper">
-                <div class="lightbox-caption">After</div>
-                <img id="lb-after" src="">
-            </div>
-        </div>
-    </div>
-
-    <footer class="py-5 text-center text-muted border-top mt-5">
-        <div class="container">
-            <small style="font-size: 0.6rem; letter-spacing: 1px;">
-                &copy; 2026
-                <a href="{{ url_for('admin', key=admin_key) }}" style="color:inherit; text-decoration:none; opacity: 0.5;">
-                    FLOW MD CLINIC临时用的, 之后记得删掉这个link
-                </a>.
-                ALL RIGHTS RESERVED.
-            </small>
-        </div>
-    </footer>
-
-    <script>
-        function toggleOverlay(id, event) {
-            if (event) event.stopPropagation();
-            const el = document.getElementById(id);
-            el.classList.toggle('show');
-        }
-
-        function openComparisonLightbox(beforeUrl, afterUrl) {
-            document.getElementById('lb-before').src = beforeUrl;
-            document.getElementById('lb-after').src = afterUrl;
-            const lb = document.getElementById('lightbox-overlay');
-            lb.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeLightbox() {
-            const lb = document.getElementById('lightbox-overlay');
-            lb.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-    </script>
-</body>
-</html>
+<script>
+    function toggleOverlay(id, event) {
+        if (event) event.stopPropagation();
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('show');
+    }
+</script>
+{% endblock %}

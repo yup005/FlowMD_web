@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}FlowMD Clinic | Aesthetic Excellence{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+
+    <style>
+        :root { --fmd-beige: #FAF8F5; --fmd-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { background-color: #ffffff; color: #1a1a1a; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; margin: 0; padding: 0;}
+
+        /* --- 🌟 1. Top Bar 地址栏 --- */
+        .top-bar { background-color: var(--fmd-beige); padding: 12px 0; font-size: 0.65rem; letter-spacing: 1.5px; border-bottom: 1px solid #eee; z-index: 1001; position: relative; }
+        .top-bar-link { color: #333; text-decoration: none; font-weight: 400; text-transform: uppercase; }
+
+        /* --- 🌟 2. Main Header --- */
+        .main-header { background: #ffffff; padding: 3rem 0; transition: var(--fmd-transition); width: 100%; z-index: 1000; position: sticky; top: 0; }
+        .main-header.scrolled { padding: 0.8rem 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-bottom: 1px solid #eee; }
+
+        .nav-logo-desktop { height: 150px; width: auto; transition: var(--fmd-transition); }
+        .main-header.scrolled .nav-logo-desktop { height: 50px; }
+
+        /* --- 🌟 优化：更大、更大气的导航悬停块 --- */
+        .nav-link-custom {
+            font-size: 0.7rem;
+            letter-spacing: 3px; /* 增加字间距 */
+            color: #1a1a1a !important;
+            text-decoration: none;
+            font-weight: 300;
+            text-transform: uppercase;
+            padding: 15px 30px; /* 显著加大块的尺寸 */
+            border-radius: 4px;
+            transition: var(--fmd-transition);
+            display: inline-block;
+        }
+
+        .nav-link-custom:hover {
+            background-color: var(--fmd-beige); /* 使用米色，更统一 */
+            color: #000 !important;
+            transform: translateY(-1px); /* 轻微上浮 */
+        }
+
+        .btn-book-now { font-size: 0.65rem; letter-spacing: 2px; padding: 10px 24px; border: 1px solid #000; color: #000; text-decoration: none; text-transform: uppercase; transition: 0.3s; }
+        .btn-book-now:hover { background: #000; color: #fff !important; }
+
+        /* --- 🌟 3. 响应式适配 --- */
+        @media (max-width: 991px) {
+            .top-bar .container { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+            .top-bar .mx-3.text-muted { display: none; }
+            .top-bar-link { line-height: 1.4; font-size: 0.6rem; text-align: center; max-width: 280px; }
+
+            .nav-logo-desktop { height: 50px; }
+            .main-header { padding: 1.2rem 0; }
+            .mobile-menu-wrap { display: flex; justify-content: center; gap: 10px; margin-top: 15px; padding-top: 12px; border-top: 1px solid #f5f5f5; }
+            .header-top-row { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; }
+
+            /* 手机端保持紧凑 */
+            .nav-link-custom { padding: 8px 10px; font-size: 0.6rem; letter-spacing: 1px; }
+            .nav-link-custom:hover { background-color: transparent; transform: none; }
+        }
+
+        /* --- 🌟 4. Lightbox 大图预览 --- */
+        #lightbox-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 2000; cursor: pointer; padding: 40px 20px; align-items: center; justify-content: center; }
+        #lightbox-overlay.show { display: flex; }
+        .lightbox-content { display: flex; gap: 20px; max-width: 95%; max-height: 85vh; }
+        .lightbox-img-wrapper img { max-width: 100%; max-height: 75vh; object-fit: contain; border: 1px solid #eee; }
+        .close-x { position: fixed; top: 20px; right: 25px; font-size: 24px; color: #000; z-index: 2101; cursor: pointer; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="container text-center">
+            <a href="tel:+16693219386" class="top-bar-link"><i class="fa-solid fa-phone me-1"></i> +1 669-321-9386</a>
+            <span class="mx-3 text-muted" style="opacity: 0.3;">|</span>
+            <a href="#" class="top-bar-link"><i class="fa-solid fa-location-dot me-1"></i> 500 E Remington Dr Suite 10, Sunnyvale, CA 94087</a>
+        </div>
+    </div>
+
+    <header class="main-header" id="mainHeader">
+        <div class="container">
+            <div class="row align-items-center d-none d-lg-flex">
+                <div class="col-lg-4 d-flex gap-2"> <a href="/treatments" class="nav-link-custom">TREATMENTS</a>
+                    <a href="/gallery" class="nav-link-custom">GALLERY</a>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <a href="/"><img src="{{ url_for('static', filename='logo.svg') }}" class="nav-logo-desktop" alt="FLOWMD"></a>
+                </div>
+                <div class="col-lg-4 d-flex align-items-center justify-content-end gap-2">
+                    <a href="/office" class="nav-link-custom">OFFICE</a>
+                    <a href="https://wa.me/..." class="btn-book-now">BOOK NOW</a>
+                </div>
+            </div>
+            <div class="d-lg-none">
+                <div class="header-top-row">
+                    <a href="/"><img src="{{ url_for('static', filename='logo.svg') }}" style="height: 40px;" alt="FLOWMD"></a>
+                    <a href="https://wa.me/..." class="btn-book-now">BOOK NOW</a>
+                </div>
+                <div class="mobile-menu-wrap">
+                    <a href="/treatments" class="nav-link-custom">TREATMENTS</a>
+                    <a href="/gallery" class="nav-link-custom">GALLERY</a>
+                    <a href="/office" class="nav-link-custom">OFFICE</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="py-5 text-center text-muted border-top mt-5">
+        <div class="container">
+            <small style="letter-spacing: 2px; font-size: 0.6rem;">&copy; 2026 <a href="{{ url_for('admin', key=admin_key) }}" style="color:inherit; text-decoration:none;">FlowMD CLINIC记得删掉这里的link</a>. ALL RIGHTS RESERVED.</small>
+        </div>
+    </footer>
+
+    <div id="lightbox-overlay" onclick="closeLightbox()">
+        <span class="close-x">✕</span>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <div class="lightbox-img-wrapper"><img id="lb-before"></div>
+            <div class="lightbox-img-wrapper"><img id="lb-after"></div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 20) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+        function openComparisonLightbox(b, a) {
+            document.getElementById('lb-before').src = b;
+            document.getElementById('lb-after').src = a;
+            document.getElementById('lightbox-overlay').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox-overlay').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
